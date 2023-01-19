@@ -30,6 +30,47 @@ async function run() {
       const result = await todoCollection.insertOne(todo);
       res.send(result);
     });
+
+    // get todo form server
+    app.get('/todo', async (req, res) => {
+     
+      const cursor = todoCollection.find({});
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+
+    app.put('/update/:id', async (req, res) => {
+      const id = req.params;
+      const {inProgress,done} = req.body;
+      const filter = { _id: ObjectId(id) };
+     
+            const updatedDoc = {
+              $set: {
+                  done:done,
+                  inProgress:inProgress,
+                },
+            };
+            const updatedOrder = await todoCollection.updateOne(filter, updatedDoc);
+
+            res.send(updatedOrder);
+    });
+    app.put('/done/:id', async (req, res) => {
+      const id = req.params;
+      const {done,inProgress} = req.body;
+      const filter = { _id: ObjectId(id) };
+     
+            const updatedDoc = {
+                $set: {
+                done: done,
+                inProgress: inProgress
+                
+                },
+            };
+            const updatedOrder = await todoCollection.updateOne(filter, updatedDoc);
+
+            res.send(updatedOrder);
+    });
   } finally {
   }
 }
