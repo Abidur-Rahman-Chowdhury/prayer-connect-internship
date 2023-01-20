@@ -42,35 +42,21 @@ async function run() {
 
     app.put('/update/:id', async (req, res) => {
       const id = req.params;
-      const {inProgress,done} = req.body;
+      const {inProgress,done,todo} = req.body;
       const filter = { _id: ObjectId(id) };
      
             const updatedDoc = {
               $set: {
                   done:done,
-                  inProgress:inProgress,
+                inProgress: inProgress,
+                todo:todo
                 },
             };
-            const updatedOrder = await todoCollection.updateOne(filter, updatedDoc);
+            const updateTodo = await todoCollection.updateOne(filter, updatedDoc);
 
-            res.send(updatedOrder);
+            res.send(updateTodo);
     });
-    app.put('/done/:id', async (req, res) => {
-      const id = req.params;
-      const {done,inProgress} = req.body;
-      const filter = { _id: ObjectId(id) };
-     
-            const updatedDoc = {
-                $set: {
-                done: done,
-                inProgress: inProgress
-                
-                },
-            };
-            const updatedOrder = await todoCollection.updateOne(filter, updatedDoc);
-
-            res.send(updatedOrder);
-    });
+    
   } finally {
   }
 }
